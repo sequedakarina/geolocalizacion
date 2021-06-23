@@ -1,33 +1,19 @@
-const express = require("express");
-const fs = require("fs");
-let app = express();
-const Path = require("path");
+if (navigator.geolocation) {
+    //check if geolocation is available
+    navigator.geolocation.getCurrentPosition((position) => {
+        let latitud = position.coords.latitude; //Obtener latitud
+        let longitud = position.coords.longitude; //Obtener longitud
 
-app.post("/", (req, res) => {
-    let ubicacion = navigator.geolocation;
-
-    if (ubicacion) {
-        //Validar si hay acceso web a la ubicación
-        ubicacion.getCurrentPosition(mostrarUbicacion); //Obtiene la posición
-    } else {
-        alert("¡Error! Este navegador no soporta la Geolocalización.");
-    }
-    //Funcion para obtener latitud y longitud
-    function mostrarUbicacion(position) {
-        var latitud = position.coords.latitude; //Obtener latitud
-        var longitud = position.coords.longitude; //Obtener longitud
-        var datos = {
+        let datos = {
             lat: latitud,
             lon: longitud,
         };
+
         let dataJson = JSON.stringify(datos);
-        fs.writeFile("nameFile.json", dataJson);
-    }  
 
-   
-    res.status(200).json({
-        ok: true,
+        var blob = new Blob([dataJson], { tipo: "text / plain; charset = utf-8" });
+        console.log(blob, "blob");
+
+        // let file = new File([blob], "jsonKarina", { lastModified: Date.now() });
     });
-});
-
-module.exports = app;
+}
